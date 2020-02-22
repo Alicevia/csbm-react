@@ -205,14 +205,14 @@ export default {
   manifest: {
     basePath: '/',
   }, // chainWebpack: webpackPlugin,
-  proxy: {
-    '/api/': {
-      target: 'https://www.cluster-dt.com/pcwechat/',
-      changeOrigin: true,
-      pathRewrite: { '/api/': '' },
-      secure: true
-    },
-  },
+  // proxy: {
+  //   '/api/': {
+  //     target: 'https://www.cluster-dt.com/pcwechat/',
+  //     changeOrigin: true,
+  //     pathRewrite: { '/api/': '' },
+  //     secure: true
+  //   },
+  // },
   // "proxy": {
   //   "api1": {
   //     "changeOrigin": true,
