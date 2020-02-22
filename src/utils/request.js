@@ -49,8 +49,16 @@ const errorHandler = error => {
  */
 
 const request = extend({
+  // prefix:'https://www.cluster-dt.com/pcwechat/',
+  // prefix:'http://jsonplaceholder.typicode.com/',
+  // prefix:'',
+
   errorHandler,
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+
 });
+
+
+
 export default request;

@@ -4,7 +4,6 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
-import { formatMessage } from 'umi-plugin-react/locale';
 import React, { useEffect } from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
@@ -14,6 +13,7 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 import logo from '../assets/logo.svg';
+
 const noMatch = (
   <Result
     status="403"
@@ -26,14 +26,13 @@ const noMatch = (
     }
   />
 );
-
 /**
  * use Authorized check all menu item
  * 输入要渲染的所有路由
  */
+
 const menuDataRender = menuList =>
   menuList.map(item => {
-   
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
     return Authorized.check(item.authority, localItem, null);
   });
@@ -64,7 +63,7 @@ const defaultFooterDom = (
   />
 );
 
-const footerRender = (props) => {
+const footerRender = props => {
   if (!isAntDesignPro()) {
     return defaultFooterDom;
   }
@@ -85,7 +84,6 @@ const footerRender = (props) => {
             alt="netlify logo"
           />
         </a>
-      
       </div>
     </>
   );
@@ -103,6 +101,7 @@ const BasicLayout = props => {
   /**
    * constructor
    */
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -129,7 +128,6 @@ const BasicLayout = props => {
   return (
     <ProLayout
       logo={logo}
-      formatMessage={formatMessage}
       menuHeaderRender={(logoDom, titleDom) => (
         <Link to="/">
           {logoDom}
@@ -141,24 +139,23 @@ const BasicLayout = props => {
         if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
           return defaultDom;
         }
+
         return <Link to={menuItemProps.path}>{defaultDom}1</Link>;
       }}
-      breadcrumbRender={(routers = []) => {
-        return [
-          {
-            path: '/',
-            breadcrumbName: '首页',
-          },
-          ...routers,
-        ]
-      }}
+      breadcrumbRender={(routers = []) => [
+        {
+          path: '/',
+          breadcrumbName: '首页',
+        },
+        ...routers,
+      ]}
       itemRender={(route, params, routes, paths) => {
         const first = routes.indexOf(route) === 0;
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-            <span>{route.breadcrumbName}</span>
-          );
+          <span>{route.breadcrumbName}</span>
+        );
       }}
       footerRender={footerRender}
       menuDataRender={menuDataRender}

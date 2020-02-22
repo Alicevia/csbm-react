@@ -78,6 +78,7 @@ if (isAntDesignProPreview) {
 
 export default {
   plugins,
+  history:'hash',
   hash: true,
   targets: {
     ie: 11,
@@ -204,11 +205,21 @@ export default {
   manifest: {
     basePath: '/',
   }, // chainWebpack: webpackPlugin,
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/api/': {
+      target: 'https://www.cluster-dt.com/pcwechat/',
+      changeOrigin: true,
+      pathRewrite: { '/api/': '' },
+      secure: true
+    },
+  },
+  // "proxy": {
+  //   "api1": {
+  //     "changeOrigin": true,
+  //     "pathRewrite": { "^api1" : "" },
+  //     "target": "http://jsonplaceholder.typicode.com/",
+  //     secure: true
+  //   }
+  // }
 };
+    
