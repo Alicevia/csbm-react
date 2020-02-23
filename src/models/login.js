@@ -1,22 +1,28 @@
 import { stringify } from 'querystring';
 import { router } from 'umi';
-import { fakeAccountLogin } from '@/services/login';
+import { reqPhoneLogin } from '@/services'
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 const Model = {
   namespace: 'login',
   state: {
     status: undefined,
+    token: localStorage.getItem('user-token')||''
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      }); // Login successfully
+      let { phone, password, type } = payload
+      const response = yield call(reqPhoneLogin, { phone, password });
      
-      if (response.status === 'ok') {
+      yield put({ //登录之后不管成功与否都将结果给reducer，
+        //让reducer处理成功与失败的反应,顺便告诉用户登录失败的原因
+        type: 'changeLoginStatus',
+        payload: { ...response.data, token: response.headers['user-token']||'', type },
+      }); // Login successfully
+      if (response.data.succeed) {
+
+        localStorage.setItem('user-token', response.headers['user-token'])
+
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -35,15 +41,14 @@ const Model = {
             return;
           }
         }
-        console.log('00')
         router.replace(redirect || '/');
       }
     },
 
     logout() {
       const { redirect } = getPageQuery(); // Note: There may be security issues, please note
-
       if (window.location.pathname !== '/user/login' && !redirect) {
+        localStorage.removeItem('user-token')
         router.replace({
           pathname: '/user/login',
           search: stringify({
@@ -55,8 +60,15 @@ const Model = {
   },
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
-      return { ...state, status: payload.status, type: payload.type };
+      // setAuthority(payload.currentAuthority);
+      setAuthority('guest');
+      return {
+        ...state,
+        message: payload.message, 
+        status: payload.succeed ? null : 'error',
+        token: payload.token,
+        type: payload.type
+      };
     },
   },
 };

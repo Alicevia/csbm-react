@@ -1,20 +1,34 @@
 import axios from 'axios'
+import {Message} from 'antd'
+
 let instance1 = axios.create({
   // baseURL: 'http://192.168.50.163:8090/smtApi/',
   // baseURL: 'http://192.168.50.30:8090/smtApi/',
-  timeout: 10000
+  baseURL:'',
+  timeout: 10000,
+  headers:{
+    // "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+  }
 })
 
 instance1.interceptors.request.use(config => {
-
+  let token = localStorage.getItem('user-token')
+  if (token) {
+    config.headers['user-token'] = token
+  }
   return config
 }, err => {
   return Promise.reject(err)
 })
 
 instance1.interceptors.response.use(response => {
-  console.log(response)
-
+  if (response.data.succeed === false && response.data.code === 401) {//检测所有的响应
+    Message.error('用户信息已过期')
+    localStorage.removeItem('user-token');
+    // location.href = 'http://localhost:8000/user/login'
+    // router.replace({ path: '/login' })
+    // location.href="http://192.168.50.236:8080/login"
+}//如果返回的数据提示user-token过期 那么会自动跳转到login
   return response
 
 }, err => {

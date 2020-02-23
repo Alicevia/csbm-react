@@ -22,7 +22,6 @@ const Login = props => {
     if (!child) {
       return;
     }
-
     if (child.type.typeName === 'LoginTab') {
       TabChildren.push(child);
     } else {
@@ -67,6 +66,9 @@ const Login = props => {
                 className={styles.tabs}
                 activeKey={type}
                 onChange={activeKey => {
+                  if (activeKey==='weChat') {
+                    props.weChatHandle()
+                  }
                   setType(activeKey);
                 }}
               >

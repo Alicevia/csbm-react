@@ -103,11 +103,11 @@ const BasicLayout = props => {
    */
 
   useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
+    // if (dispatch) {
+    //   dispatch({
+    //     type: 'user/fetchCurrent',
+    //   });
+    // }
   }, []);
   /**
    * init variables
@@ -127,6 +127,7 @@ const BasicLayout = props => {
   };
   return (
     <ProLayout
+    //左上角的logo
       logo={logo}
       menuHeaderRender={(logoDom, titleDom) => (
         <Link to="/">

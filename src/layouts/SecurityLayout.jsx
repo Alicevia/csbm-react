@@ -14,8 +14,7 @@ class SecurityLayout extends React.Component {
       isReady: true,
     });
     const { dispatch } = this.props;
-
-    if (dispatch) {
+    if (dispatch) {//进入首页的时候调用申请个人信息
       dispatch({
         type: 'user/fetchCurrent',
       });
@@ -24,10 +23,12 @@ class SecurityLayout extends React.Component {
 
   render() {
     const { isReady } = this.state;
-    const { children, loading, currentUser } = this.props; 
+    const { children, loading, currentUser,token } = this.props; 
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）
+  
+    // const isLogin = currentUser && currentUser.userid;
+    const isLogin = token;//如果redux中获取到了token那么就继续登录
 
-    const isLogin = currentUser && currentUser.userid;
     const queryString = stringify({
       redirect: window.location.href,
     });
@@ -44,7 +45,8 @@ class SecurityLayout extends React.Component {
   }
 }
 
-export default connect(({ user, loading }) => ({
+export default connect(({ user, loading,login }) => ({
   currentUser: user.currentUser,
   loading: loading.models.user,
+  token:login.token
 }))(SecurityLayout);

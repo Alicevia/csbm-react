@@ -78,7 +78,7 @@ if (isAntDesignProPreview) {
 
 export default {
   plugins,
-  history:'hash',
+  // history:'hash',
   hash: true,
   targets: {
     ie: 11,
@@ -89,6 +89,10 @@ export default {
       path: '/user',
       component: '../layouts/UserLayout',
       routes: [
+        {
+          path:'/user',
+          redirect:'/user/login',
+        },
         {
           name: 'login',
           path: '/user/login',
@@ -103,7 +107,7 @@ export default {
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['admin', 'user'],
+          // authority: ['admin', 'user'],
           routes: [
             {
               path: '/',
@@ -120,27 +124,15 @@ export default {
               name: 'admin',
               icon: 'crown',
               component: './Admin',
-              authority: ['admin'],
+              // authority: ['admin'],
             },
-            {
-              name: 'list.table-list',
-              icon: 'table',
-              path: '/list',
-              component: './ListTableList',
-            },
-            {
-              name: 'todolist',
-              icon: 'table',
-              path: '/todolist',
-              component: './todolist',
-            },
-           
+         
             {
               name: '空白页面',
               icon: 'smile',
               path: '/emptypage',
               component: './EmptyPage',
-              authority: ['admin'],
+              // authority: ['admin'],
               routes:[
                 {
                   name: '空白页面',
@@ -205,14 +197,14 @@ export default {
   manifest: {
     basePath: '/',
   }, // chainWebpack: webpackPlugin,
-  // proxy: {
-  //   '/api/': {
-  //     target: 'https://www.cluster-dt.com/pcwechat/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '/api/': '' },
-  //     secure: true
-  //   },
-  // },
+  proxy: {
+    '/api': { //当前的请求需要跨域的时候要特别注意你的axios内的url请求地址开头要加/否者可能不起作用
+      target: 'https://www.cluster-dt.com/pcwechat',
+      changeOrigin: true,
+      pathRewrite: { '/api': '' },
+      secure: true
+    },
+  },
   // "proxy": {
   //   "api1": {
   //     "changeOrigin": true,
