@@ -21,7 +21,7 @@ const LoginTab = props => {
     }
   }, []);
   const { children } = props;
-  return <TabPane {...props}>{children}</TabPane>;
+  return <TabPane {...props}>{props.active && children}</TabPane>;
 };
 
 const WrapContext = props => (

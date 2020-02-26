@@ -127,7 +127,7 @@ const BasicLayout = props => {
   };
   return (
     <ProLayout
-    //左上角的logo
+      //左上角的logo
       logo={logo}
       menuHeaderRender={(logoDom, titleDom) => (
         <Link to="/">
@@ -141,7 +141,7 @@ const BasicLayout = props => {
           return defaultDom;
         }
 
-        return <Link to={menuItemProps.path}>{defaultDom}1</Link>;
+        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
       breadcrumbRender={(routers = []) => [
         {

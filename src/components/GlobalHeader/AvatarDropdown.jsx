@@ -20,9 +20,12 @@ class AvatarDropdown extends React.Component {
       }
 
       return;
+    } else if (key === 'center') {
+      router.replace({ pathname: '/account' });
+      return;
     }
 
-    router.push(`/account/${key}`);
+    // router.push(`/account/${key}`);
   };
 
   render() {
@@ -48,7 +51,10 @@ class AvatarDropdown extends React.Component {
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}
-
+        <Menu.Item key="center">
+          <UserOutlined />
+          个人中心
+        </Menu.Item>
         <Menu.Item key="logout">
           <LogoutOutlined />
           退出登录
@@ -58,19 +64,24 @@ class AvatarDropdown extends React.Component {
     return currentUser && currentUser.nickName ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.headPicture} alt="avatar" />
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            src={currentUser.headPicture}
+            alt="avatar"
+          />
           <span className={styles.name}>{currentUser.nickName}</span>
         </span>
       </HeaderDropdown>
     ) : (
-        <Spin
-          size="small"
-          style={{
-            marginLeft: 8,
-            marginRight: 8,
-          }}
-        />
-      );
+      <Spin
+        size="small"
+        style={{
+          marginLeft: 8,
+          marginRight: 8,
+        }}
+      />
+    );
   }
 }
 

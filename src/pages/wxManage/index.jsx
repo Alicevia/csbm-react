@@ -1,0 +1,18 @@
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import React, { useState, useEffect } from 'react';
+import { Spin, Card } from 'antd';
+import styles from './index.less';
+
+export default props => {
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000);
+  // }, []);
+  return (
+    <PageHeaderWrapper content="这是一个新页面，从这里进行开发！">
+      <Card>{props.children}</Card>
+    </PageHeaderWrapper>
+  );
+};

@@ -51,7 +51,6 @@ const plugins = [
           /components\//,
         ],
       },
-
     },
   ],
   [
@@ -90,8 +89,8 @@ export default {
       component: '../layouts/UserLayout',
       routes: [
         {
-          path:'/user',
-          redirect:'/user/login',
+          path: '/user',
+          redirect: '/user/login',
         },
         {
           name: 'login',
@@ -111,42 +110,70 @@ export default {
           routes: [
             {
               path: '/',
-              redirect: '/welcome',
+              redirect: '/wxmanage',
             },
             {
-              path: '/welcome',
-              name: 'welcome',
-              icon: 'smile',
-              component: './Welcome',
-            },
-            {
-              path: '/admin',
-              name: 'admin',
-              icon: 'crown',
-              component: './Admin',
-              // authority: ['admin'],
-            },
-         
-            {
-              name: '空白页面',
-              icon: 'smile',
-              path: '/emptypage',
-              component: './EmptyPage',
-              // authority: ['admin'],
-              routes:[
+              path: '/wxmanage',
+              name: '微信管理',
+              icon: 'wechat',
+              component: './wxManage',
+              routes: [
                 {
-                  name: '空白页面',
-                  icon: 'smile',
-                  path: '/emptypage/emptypagetwo',
-                  component: './EmptyPage/EmptyPageTwo',
+                  path: '/wxmanage',
+                  redirect: 'wxofficalset',
                 },
-              ]
+                {
+                  path: 'wxofficalset',
+                  name: '公众号设置',
+                  icon: 'setting',
+                  component: './wxManage/wxOfficalSet',
+                },
+                {
+                  path: 'menuset',
+                  name: '自定义菜单',
+                  icon: 'menu',
+                  component: './wxManage/menuSet',
+                },
+                {
+                  path: 'usermanage',
+                  name: '用户管理',
+                  icon: 'usergroup-add',
+                  component: './wxManage/userManage',
+                },
+              ],
+            },
+            {
+              path: '/servicemanage',
+              name: '服务管理',
+              icon: 'cloud',
+              component: './serviceManage',
+            },
+            {
+              path: '/sms',
+              name: '短信服务',
+              icon: 'mail',
+              component: './sms',
+            },
+
+            {
+              path: '/account',
+              name: '账户信息',
+              icon: 'user',
+              component: './account',
+            },
+            {
+              path: '/intentionuser',
+              name: '意向用户',
+              icon: 'crown',
+              component: './intentionUser',
+              // authority: ['admin'],
             },
             {
               component: './404',
             },
           ],
         },
+
         {
           component: './404',
         },
@@ -198,11 +225,12 @@ export default {
     basePath: '/',
   }, // chainWebpack: webpackPlugin,
   proxy: {
-    '/api': { //当前的请求需要跨域的时候要特别注意你的axios内的url请求地址开头要加/否者可能不起作用
+    '/api': {
+      //当前的请求需要跨域的时候要特别注意你的axios内的url请求地址开头要加/否者可能不起作用
       target: 'https://www.cluster-dt.com/pcwechat',
       changeOrigin: true,
       pathRewrite: { '/api': '' },
-      secure: true
+      secure: true,
     },
   },
   // "proxy": {
@@ -214,4 +242,3 @@ export default {
   //   }
   // }
 };
-    
