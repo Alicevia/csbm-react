@@ -1,27 +1,28 @@
 import { stringify } from 'querystring';
 import { router } from 'umi';
-import { reqPhoneLogin } from '@/services'
+import { reqPhoneLogin, reqWeChatLogin } from '@/services';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { message } from 'antd';
 const Model = {
   namespace: 'login',
   state: {
     status: undefined,
-    token: localStorage.getItem('user-token')||''
+    token: localStorage.getItem('user-token') || '',
   },
   effects: {
     *login({ payload }, { call, put }) {
-      let { phone, password, type } = payload
+      let { phone, password, type } = payload;
       const response = yield call(reqPhoneLogin, { phone, password });
-     
-      yield put({ //登录之后不管成功与否都将结果给reducer，
+
+      yield put({
+        //登录之后不管成功与否都将结果给reducer，
         //让reducer处理成功与失败的反应,顺便告诉用户登录失败的原因
         type: 'changeLoginStatus',
-        payload: { ...response.data, token: response.headers['user-token']||'', type },
+        payload: { ...response.data, token: response.headers['user-token'] || '', type },
       }); // Login successfully
       if (response.data.succeed) {
-
-        localStorage.setItem('user-token', response.headers['user-token'])
+        localStorage.setItem('user-token', response.headers['user-token']);
 
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -44,11 +45,22 @@ const Model = {
         router.replace(redirect || '/');
       }
     },
-
-    logout() {
+    *wxLogin({ payload }, { call, put }) {
+      let response = yield call(reqWeChatLogin, payload);
+      console.log(response);
+      if (response.data.succeed) {
+        localStorage.setItem('user-token', response.headers['user-token']);
+        yield put({ type: 'user/fetchCurrent' });
+      } else {
+        message.error('微信登录失败');
+        router.replace({ pathname: '/user' });
+      }
+    },
+    *logout({}, { put }) {
       const { redirect } = getPageQuery(); // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
-        localStorage.removeItem('user-token')
+        localStorage.removeItem('user-token');
+        yield put({ type: 'user/saveCurrentUser', payload: {} });
         router.replace({
           pathname: '/user/login',
           search: stringify({
@@ -64,10 +76,10 @@ const Model = {
       setAuthority('guest');
       return {
         ...state,
-        message: payload.message, 
+        message: payload.message,
         status: payload.succeed ? null : 'error',
         token: payload.token,
-        type: payload.type
+        type: payload.type,
       };
     },
   },
