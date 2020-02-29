@@ -120,7 +120,7 @@ export default {
               routes: [
                 {
                   path: '/wxmanage',
-                  redirect: 'wxofficalset',
+                  redirect: '/wxmanage/wxofficalset',
                 },
                 {
                   path: 'wxofficalset',

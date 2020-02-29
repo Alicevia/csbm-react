@@ -158,7 +158,7 @@ const BasicLayout = props => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={footerRender}
+      // footerRender={footerRender} 页脚
       menuDataRender={menuDataRender}
       rightContentRender={() => <RightContent />}
       {...props}

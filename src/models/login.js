@@ -23,6 +23,7 @@ const Model = {
       }); // Login successfully
       if (response.data.succeed) {
         localStorage.setItem('user-token', response.headers['user-token']);
+        yield put({ type: 'user/fetchCurrent' });
 
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -42,6 +43,7 @@ const Model = {
             return;
           }
         }
+        console.log(redirect);
         router.replace(redirect || '/');
       }
     },
@@ -61,6 +63,7 @@ const Model = {
       if (window.location.pathname !== '/user/login' && !redirect) {
         localStorage.removeItem('user-token');
         yield put({ type: 'user/saveCurrentUser', payload: {} });
+        yield put({ type: 'changeLoginStatus', payload: {} });
         router.replace({
           pathname: '/user/login',
           search: stringify({

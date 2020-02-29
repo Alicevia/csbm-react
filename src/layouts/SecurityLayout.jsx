@@ -10,14 +10,10 @@ class SecurityLayout extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({
-      isReady: true,
-    });
     const {
       dispatch,
       location: { query },
     } = this.props;
-    console.log(this.props);
     if (query.openid) {
       //进入首页的时候调用申请个人信息
       dispatch({
@@ -29,6 +25,9 @@ class SecurityLayout extends React.Component {
         type: 'user/fetchCurrent',
       });
     }
+    this.setState({
+      isReady: true,
+    });
   }
 
   render() {
@@ -41,12 +40,11 @@ class SecurityLayout extends React.Component {
     const queryString = stringify({
       redirect: window.location.href,
     });
-
-    if (!isLogin || !isReady) {
+    // 没有获取到用户信息 并且loading 已经为true了那么会进入等待
+    if ((!isLogin && loading) || !isReady) {
       return <PageLoading />;
     }
-
-    if (!isLogin) {
+    if (!isLogin && window.location.pathname !== '/user/login') {
       return <Redirect to={`/user/login?${queryString}`}></Redirect>;
     }
 
@@ -54,8 +52,12 @@ class SecurityLayout extends React.Component {
   }
 }
 
-export default connect(({ user, loading, login }) => ({
-  currentUser: user.currentUser,
-  loading: loading.models.user,
-  token: login.token,
-}))(SecurityLayout);
+export default connect(({ user, loading, login }) => {
+  // loading记录是否触发过saga，或者理解为是否派发过action
+  // console.log(loading)
+  return {
+    currentUser: user.currentUser,
+    loading: loading.models.user || loading.models.login,
+    token: login.token,
+  };
+})(SecurityLayout);

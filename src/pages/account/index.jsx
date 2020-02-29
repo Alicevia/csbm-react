@@ -2,8 +2,22 @@ import React from 'react';
 import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
 import { Card, Typography, Alert } from 'antd';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-export default () => (
-  <PageHeaderWrapper content=" 这个页面只有 admin 权限才能查看">
-    <Card></Card>
+import AccountInfo from './AccountInfo';
+import { connect } from 'dva';
+const Account = props => (
+  <PageHeaderWrapper>
+    <Card>
+      <AccountInfo currentUser={props.currentUser} />
+    </Card>
   </PageHeaderWrapper>
 );
+
+export default connect(state => {
+  console.log(state);
+  let {
+    user: { currentUser },
+  } = state;
+  return {
+    currentUser,
+  };
+})(Account);
