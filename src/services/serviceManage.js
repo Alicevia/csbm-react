@@ -25,10 +25,9 @@ export const reqAllGroupInfo = data => {
 // 开通服务
 export const reqOpenService = data =>
   axios({
-    url: 'manage/openingService',
+    url: '/api/manage/openingService',
     data,
-    type: 'POST',
-    flag: false,
+    method: 'post',
   });
 
 //-------------------- 用户管理页面

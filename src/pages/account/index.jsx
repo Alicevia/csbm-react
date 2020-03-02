@@ -13,7 +13,6 @@ const Account = props => (
 );
 
 export default connect(state => {
-  console.log(state);
   let {
     user: { currentUser },
   } = state;

@@ -66,6 +66,7 @@ const RegistrationForm = props => {
         initialValues={{
           residence: ['zhejiang', 'hangzhou', 'xihu'],
           prefix: '86',
+          email,
         }}
         scrollToFirstError
       >
@@ -86,7 +87,7 @@ const RegistrationForm = props => {
           <Input disabled defaultValue={phone} />
         </Form.Item>
         <Form.Item name="email" label="邮箱">
-          <Input defaultValue={email} />
+          <Input />
         </Form.Item>
         <Form.Item name="address" label="地址">
           <Input defaultValue={address} />
