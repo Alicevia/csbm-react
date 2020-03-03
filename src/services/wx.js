@@ -12,15 +12,14 @@ export const reqInitWeChatAuthInfo = data =>
   axios({
     url: '/api/auth/uploadCustomerImg',
     data,
-    mehtod: 'post',
+    method: 'post',
   });
 //修改公众号信息
 export const reqModiWeChatAuth = data =>
   axios({
-    url: 'auth/modifyWeChatAuth',
+    url: '/api/auth/modifyWeChatAuth',
     data,
-    type: 'PUT',
-    flag: false,
+    method: 'put',
   });
 
 // 通过appid查询公众号是否授权
@@ -28,7 +27,6 @@ export const reqCheckAuth = data => {
   let url = `auth/queryAuthorization/${data.appId}`;
   return axios({
     url,
-    flag: false,
   });
 };
 
@@ -47,8 +45,7 @@ export const reqAliMessageAuth = () =>
 //阿里云短信修改
 export const reqModiAliMessage = data =>
   axios({
-    url: 'ali/message/updateMessage',
+    url: '/api/ali/message/updateMessage',
     data,
-    type: 'POST',
-    flag: false,
+    method: 'post',
   });

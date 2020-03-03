@@ -11,6 +11,9 @@ const WxManage = props => {
       dispatch({
         type: 'wx/getWeChatInfo',
       });
+      // dispatch({
+      //   type:'wx/getAliMessageInfo'
+      // })
     }
   }, []);
   return (

@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useRef, useEffect } from 'react';
-import styles from './index.less';
-
 import { Form, Input, Button, Checkbox, Switch, Row, Col } from 'antd';
 import { connect } from 'dva';
 import Upload from '@/components/Upload/Upload';
+import utils from '@/utils/myutils';
+import styles from './index.less';
+
 const layout = {
   labelCol: {
     span: 5,
@@ -20,8 +21,9 @@ const tailLayout = {
 };
 
 const WxOfficalSet = props => {
-  let { weChatInfo } = props;
+  let { weChatInfo, dispatch } = props;
   let [logoImg, setLogoImg] = useState(weChatInfo.customerIcon);
+
   let [form] = Form.useForm();
   const [switchValue, setSwitchValue] = useState(false);
   const onFill = () => {
@@ -34,8 +36,40 @@ const WxOfficalSet = props => {
   useEffect(() => {
     form.setFieldsValue({ customerIcon: logoImg });
   }, [logoImg]);
+
   const onFinish = values => {
-    console.log('Success:', values);
+    values = { ...weChatInfo, ...values };
+    let data = createFormdata(values);
+    if (weChatInfo.id) {
+      dispatch({
+        type: 'wx/getModiWeChatInfo',
+        payload: data,
+      });
+    } else {
+      dispatch({
+        type: 'wx/getInitWeChatInfo',
+        payload: data,
+      });
+    }
+  };
+  const createFormdata = data => {
+    let formdata = new FormData();
+    for (const key in data) {
+      if (data.hasOwnProperty(key) && data[key]) {
+        if (key === 'customerIcon') {
+          continue;
+        }
+        formdata.append([key], data[key]);
+      }
+    }
+    // 如果上传了图片那么将图片追加到formdata
+    if (data.customerIcon && data.customerIcon.startsWith('http')) {
+      return formdata;
+    } else if (data.customerIcon) {
+      let file = utils.dataURLtoFile(data.customerIcon, 'logo.png');
+      formdata.append('file', file);
+      return formdata;
+    }
   };
 
   const onFinishFailed = errorInfo => {
@@ -43,7 +77,6 @@ const WxOfficalSet = props => {
   };
 
   const switchChange = checked => {
-    console.log(weChatInfo);
     setSwitchValue(checked);
   };
 
@@ -58,6 +91,7 @@ const WxOfficalSet = props => {
         name="basic"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        // initialValues={weChatInfo}
       >
         <Form.Item
           label="APPID"
@@ -82,7 +116,7 @@ const WxOfficalSet = props => {
           <Input />
         </Form.Item>
         <Form.Item label="微信授权">
-          <span style={{ marginRight: 10 }}>未授权</span>
+          <span style={{ marginRight: 10 }}>{weChatInfo.isAuthorize ? '已授权' : '未授权'}</span>
           <Button>微信授权</Button>
         </Form.Item>
         <Form.Item label="微信推送通知开关">
